@@ -1,0 +1,34 @@
+version: "3.8"
+
+services:
+  client:
+    build: 
+      context: .
+      dockerfile: ./client/Dockerfile
+    container_name: viom-client
+    volumes:
+      - ./client:/usr/client/src
+      - /usr/client/src/node_modules
+    env_file:
+      - ./client/.env.local
+    ports:
+      - '3000:3000'
+    depends_on:
+      - db
+
+  db:
+    build: 
+      context: .
+      dockerfile: ./db/Dockerfile
+    container_name: viom-db
+    platform: linux/x86_64
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'  
+      MYSQL_DATABASE: 'viom'
+    volumes:
+      - mysql_data:/var/lib/mysql
+    command: --default-authentication-plugin=mysql_native_password  
+    ports:
+      - 33306:3306
+volumes:
+  mysql_data:
