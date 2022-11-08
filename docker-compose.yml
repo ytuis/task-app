@@ -5,7 +5,7 @@ services:
     build: 
       context: .
       dockerfile: ./client/Dockerfile
-    container_name: viom-client
+    container_name: task-app-client
     volumes:
       - ./client:/usr/client/src
       - /usr/client/src/node_modules
@@ -16,15 +16,28 @@ services:
     depends_on:
       - db
 
+  server:
+    build: 
+      context: .
+      dockerfile: ./server/Dockerfile
+    container_name: task-app-server
+    volumes:
+      - ./server/dockervenv:/usr/server/src/.venv
+      - ./server:/usr/server/src
+    ports:
+      - '8000:8000'
+    depends_on:
+      - db
+
   db:
     build: 
       context: .
       dockerfile: ./db/Dockerfile
-    container_name: viom-db
+    container_name: task-app-db
     platform: linux/x86_64
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'  
-      MYSQL_DATABASE: 'viom'
+      MYSQL_DATABASE: 'demo'
     volumes:
       - mysql_data:/var/lib/mysql
     command: --default-authentication-plugin=mysql_native_password  
