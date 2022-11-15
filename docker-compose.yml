@@ -13,19 +13,7 @@ services:
       - ./client/.env.local
     ports:
       - '3000:3000'
-    depends_on:
-      - db
-
-  server:
-    build: 
-      context: .
-      dockerfile: ./server/Dockerfile
-    container_name: task-app-server
-    volumes:
-      - ./server/dockervenv:/usr/server/src/.venv
-      - ./server:/usr/server/src
-    ports:
-      - '8000:8000'
+      - '5555:5555'
     depends_on:
       - db
 
@@ -33,7 +21,7 @@ services:
     build: 
       context: .
       dockerfile: ./db/Dockerfile
-    container_name: task-app-db
+    container_name: demo-db
     platform: linux/x86_64
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'  
